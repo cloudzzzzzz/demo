@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+
+<body>
+    <div class="container" id="box">
+        <form action="">
+            <div class="form-group">
+                <label for="username">用户名：</label>
+                <input type="text" class="form-control" id="username" placeholder="输入用户名" v-model="username">
+            </div>
+            <div class="form-group">
+                <label for="age">年 龄：</label>
+                <input type="text" class="form-control" id="age" placeholder="输入年龄" v-model="age">
+            </div>
+            <input type="button" value="添加" class="btn btn-primary" @click="add()">
+            <input type="reset" value="重置" class="btn btn-danger">
+        </form>
+        <hr>
+        <table class="table table-bordered table-hover">
+            <caption class="h3 text-info text-center">用户信息表</caption>
+            <tr class="text-danger">
+                <th class="text-center">序号</th>
+                <th class="text-center">名字</th>
+                <th class="text-center">年龄</th>
+                <th class="text-center">操作</th>
+            </tr>
+            <tr class="text-center" v-for="(item,index) in myData">
+                <td>{{index+1}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.age}}</td>
+                <td>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#layer" @click="delete1(index)">删除</button>
+                </td>
+            </tr>
+            <tr v-show="myData != 0">
+                !
+                <td colspan="4" class="text-right text-muted">
+                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer" @click="delete2()">删除全部</button>
+                </td>
+            </tr>
+            <tr v-show="myData == 0">
+                <td colspan="4" class="text-center text-muted">
+                    <p>暂无数据....</p>
+                </td>
+            </tr>
+        </table>
+        <!--模态框 弹出框-->
+        <div role="dialog" class="modal fade bs-example-modal-sm" id="layer">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                        <h4 class="modal-title">确认{{msg}}么?</h4>
+                    </div>
+                    <div class="modal-body text-right">
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="deleteMsg(nowIndex)">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="jquery-1.11.1.js"></script>
+    <script src="bootstrap.js"></script>
+    <script src="vue.js"></script>
+    <script>
+    window.onload = function() {
+        new Vue({
+            el: '#box',
+            data: {
+                myData: [],
+                username: '',
+                age: '',
+                nowIndex: -10,
+                msg: ''
+            },
+            methods: {
+                delete1: function(index) {
+                    this.nowIndex = index;
+                    this.msg = '删除';
+                },
+                delete2: function() {
+                    this.nowIndex = -1;
+                    this.msg = '删除全部';
+                },
+                add: function() {
+                    this.myData.push({
+                        name: this.username,
+                        age: this.age
+                    });
+                    this.username = '';
+                    this.age = '';
+                },
+                deleteMsg: function(index) {
+
+                    if (index == -1) {
+                        this.myData = [];
+                    } else {
+                        this.myData.splice(index, 1);
+                    }
+                }
+            }
+        });
+
+    }
+    </script>
+</body>
+
+</html>
